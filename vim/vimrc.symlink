@@ -11,8 +11,8 @@ endif
 
 set wildmenu 	" Better command-line-completion
 set number  	" show line numbers
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
+set ruler	" show the cursor position all the time
+set showcmd	" display incomplete commands
 set autoindent	" always set autoindenting on
 set lazyredraw  " redraw only when we need to
 set showmatch   " highlight matching [{()}]
