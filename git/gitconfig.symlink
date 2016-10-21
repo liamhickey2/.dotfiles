@@ -1,0 +1,29 @@
+# Local/private config goes in the include
+[include]
+        path = ~/.gitconfig.local
+[hub]
+        protocol = https
+[alias]
+        co = checkout
+        d   = diff
+        dc  = diff --cached
+        f   = fetch
+        fo  = fetch origin
+        com = checkout master
+        pom = pull origin master
+        st  = status -sb
+        undo  = reset HEAD~1 --mixed
+        amend = commit -a --amend
+        shortsha = rev-parse --short HEAD
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+        wc = whatchanged --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+        count   = !git shortlog -sn
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+[core]
+        editor = vim
+[push]
+        default = simple

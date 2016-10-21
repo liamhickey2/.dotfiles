@@ -1,0 +1,166 @@
+# =============================================================== #
+#
+#  PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
+#  By Liam Hickey <liam.hickey@bell.net>
+#
+#  Last modified: 21 Oct 2016
+
+#  See:
+#  http://tldp.org/LDP/abs/html/index.html
+#
+# =============================================================== #
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# shortcut to this dotfiles path is $BASH
+export BASH=$HOME/.dotfiles
+
+# project folder that I can `c [tab]` to
+export PROJECTS=~/git
+
+# all of my bash files
+typeset -U config_files
+config_files=($BASH/**/*.bash)
+
+# load everything
+for file in ${config_files}
+do
+  source $file
+done
+
+#-------------------------------------------------------------
+# Settings
+#-------------------------------------------------------------
+
+#set -o nounset     # These  two options are useful for debugging.
+#set -o xtrace
+alias debug="set -o nounset; set -o xtrace"
+
+ulimit -S -c 0      # Don't want coredumps.
+set -o notify
+set -o noclobber
+set -o ignoreeof
+
+
+# Enable options:
+shopt -s cdspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob       # Necessary for programmable completion.
+
+#============================================================
+#
+#  FUNCTIONS
+#
+#============================================================
+
+#-------------------------------------------------------------
+# Tailoring 'less'
+#-------------------------------------------------------------
+
+alias more='less'
+export PAGER=less
+export LESSCHARSET='latin1'
+export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
+                # Use this if lesspipe.sh exists.
+export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
+:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# LESS man page colors (makes Man pages more readable).
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+#-------------------------------------------------------------
+# File & strings related functions:
+#-------------------------------------------------------------
+
+# Find a file with a pattern in name:
+function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
+
+# Creates an archive (*.tar.gz) from given directory.
+function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+
+# Create a ZIP archive of a file or folder.
+function makezip() { zip -r "${1%%/}.zip" "$1" ; }
+
+# Make your directories and files access rights sane.
+function sanitize() { chmod -R u=rwX,g=rX,o= "$@" ;}
+
+#-------------------------------------------------------------
+# Process/system related functions:
+#-------------------------------------------------------------
+
+function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+
+function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
+function mydf()         # Pretty-print of 'df' output.
+{                       # Inspired by 'dfc' utility.
+    for fs ; do
+
+        if [ ! -d $fs ]
+        then
+          echo -e $fs" :No such file or directory" ; continue
+        fi
+
+        local info=( $(command df -P $fs | awk 'END{ print $2,$3,$5 }') )
+        local free=( $(command df -Pkh $fs | awk 'END{ print $4 }') )
+        local nbstars=$(( 20 * ${info[1]} / ${info[0]} ))
+        local out="["
+        for ((j=0;j<20;j++)); do
+            if [ ${j} -lt ${nbstars} ]; then
+               out=$out"*"
+            else
+               out=$out"-"
+            fi
+        done
+        out=${info[2]}" "$out"] ("$free" free on "$fs")"
+        echo -e $out
+    done
+}
+
+function my_ip() # Get IP adress on ethernet.
+{
+    MY_IP=$(/sbin/ifconfig eth0 | awk '/inet/ { print $2 } ' |
+      sed -e s/addr://)
+    echo ${MY_IP:-"Not connected"}
+}
+
+function ii()   # Get current host related info.
+{
+    echo -e "\nYou are logged on ${BRed}$HOST"
+    echo -e "\n${BRed}Additionnal information:$NC " ; uname -a
+    echo -e "\n${BRed}Users logged on:$NC " ; w -hs |
+             cut -d " " -f1 | sort | uniq
+    echo -e "\n${BRed}Current date :$NC " ; date
+    echo -e "\n${BRed}Machine stats :$NC " ; uptime
+    echo -e "\n${BRed}Memory stats :$NC " ; free
+    echo -e "\n${BRed}Diskspace :$NC " ; mydf / $HOME
+    echo -e "\n${BRed}Local IP Address :$NC" ; my_ip
+    echo -e "\n${BRed}Open connections :$NC "; netstat -pan --inet;
+    echo
+}
+
+#-------------------------------------------------------------
+# Misc utilities:
+#-------------------------------------------------------------
+
+function repeat()       # Repeat n times command.
+{
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}

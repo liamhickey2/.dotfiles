@@ -1,0 +1,110 @@
+" Maintainer: Liam Hickey <liam.hickey@bell.net>
+" Last change:	2016 Oct 20
+" Based on Bram Moolenaar's example vimrc
+
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
+
+""""""" UI """""""""
+
+set wildmenu 	" Better command-line-completion
+set number  	" show line numbers
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set autoindent	" always set autoindenting on
+set lazyredraw  " redraw only when we need to
+set showmatch   " highlight matching [{()}]
+set autoread	" autoread outside changes
+set encoding=utf8
+
+filetype plugin on
+filetype indent on
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+  try
+    colorscheme badwolf
+  catch
+  endtry
+endif
+
+""""""" Indentation/Spacing """""""""
+
+" Indentation settings for using 4 spaces instead of tabs.
+" Do not change 'tabstop' from its default value of 8 with this setup.
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+""""""""" Backups """"""""""""
+
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+else
+  set backup		" keep a backup file
+endif
+
+" Hard overrite files, do not save a .swp/.*~ on file overrite
+"set noswapfile
+"set nobackup
+"set nowritebackup
+
+" Save temp files to ~/.vim/tmp
+set backupdir=~/.vim/tmp
+
+" Version backups
+au BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M%S") . '~'
+set history=50		" keep 50 lines of command line history
+set incsearch		" do incremental searching
+
+"""""""""" Terminal """""""""""
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+"let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+"if has('mouse')
+"  set mouse=a
+"endif
+
+" allows cursor change in tmux mode
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+"""""""""" Aliases """""""""""""
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command difforig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+" :W sudo saves the file 
+" (useful for handling the permission-denied error)
+command W w !sudo tee % > /dev/null
