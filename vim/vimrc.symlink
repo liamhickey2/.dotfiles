@@ -50,24 +50,18 @@ set backspace=indent,eol,start
 
 """"""""" Backups """"""""""""
 
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file
-endif
-
 " Hard overrite files, do not save a .swp/.*~ on file overrite
-"set noswapfile
-"set nobackup
-"set nowritebackup
+set noswapfile
+set nobackup
+set nowritebackup
 
 " Save temp files to ~/.vim/tmp
-set backupdir=~/.vim/tmp
+"set backupdir=~/.vim/tmp
 
 " Version backups
-au BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M%S") . '~'
-set history=50		" keep 50 lines of command line history
-set incsearch		" do incremental searching
+"au BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M%S") . '~'
+"set history=50		" keep 50 lines of command line history
+"set incsearch		" do incremental searching
 
 """""""""" Terminal """""""""""
 
@@ -79,15 +73,6 @@ set incsearch		" do incremental searching
 "  set mouse=a
 "endif
 
-" allows cursor change in tmux mode
-if exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
 """""""""" Aliases """""""""""""
 
 " Don't use Ex mode, use Q for formatting
@@ -96,14 +81,6 @@ map Q gq
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command difforig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
