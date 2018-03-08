@@ -40,5 +40,4 @@ $DARKGRAY)$YELLOW-> $NC"
 #  Variables PCT and PS1 can be merged into a new PS1 variable:
 PS1="\`if [[ \$EUID -eq 0 ]]; then PCT='$LIGHTRED';
 else PCT='$LIGHTBLUE'; fi; 
-echo '\n$GREEN[\w] \n$DARKGRAY('\$PCT'\t$DARKGRAY)-\
-('\$PCT'\u$DARKGRAY)-('\$PCT'\!$DARKGRAY)$YELLOW-> $NC'\`"
+echo '\n$GREEN[\w] $DARKGRAY('\$PCT'\t$DARKGRAY)-('\$PCT'\u$DARKGRAY)-('\$PCT'\!$DARKGRAY)\n$YELLOW-> $NC'\`"

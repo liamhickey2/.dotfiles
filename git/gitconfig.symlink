@@ -18,6 +18,8 @@
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         wc = whatchanged --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         count   = !git shortlog -sn
+        squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
+        pc = push -u origin `git rev-parse --abbrev-ref HEAD`
 [color]
         diff = auto
         status = auto
@@ -27,3 +29,5 @@
         editor = vim
 [push]
         default = simple
+[pull]
+        rebase = true
