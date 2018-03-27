@@ -4,7 +4,13 @@
 [hub]
         protocol = https
 [alias]
-        co = checkout
+        c   = commit
+        ca  = commit -a
+        cm  = commit -m
+        cam = commit -am
+        a   = add
+        aa  = add .
+        co  = checkout
         d   = diff
         dc  = diff --cached
         f   = fetch
@@ -27,7 +33,8 @@
         ui = true
 [core]
         editor = vim
+        autocrlf = true
 [push]
-        default = simple
+        default = current
 [pull]
         rebase = true
