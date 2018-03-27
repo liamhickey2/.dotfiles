@@ -13,6 +13,7 @@
         co  = checkout
         d   = diff
         dc  = diff --cached
+        dw  = diff --ignore-space-at-eol -b -w --ignore-blank-lines
         f   = fetch
         fo  = fetch origin
         com = checkout master
