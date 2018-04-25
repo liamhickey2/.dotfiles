@@ -1,25 +1,26 @@
 # Many exerpts from Andrzej Szelachowski's ~/.bash_profile:
 
-if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
-
-parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
-}
-
 #  Git Bash is started with --login, make sure we still load .bashrc.
 
+if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
+
+# parse_git_branch() {
+#      git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
+# }
+
 #  If a colour is to be used in the PS1, it needs to be escaped first as a
-#  colour, then as a non-printable character.
-#        GRY='\[\e[1:30m\]'
+#  colour, then as a non-printing string.
+#       GRY='\e[1:30m'
+#       GRY_NPC='\[$GRY\]'
 #  Otherwise the shell will not be able to correctly calculate the length
 #  of the PS1.
 
-GRY='\[\e[1;30m\]'
-RED='\[\e[1;31m\]'
-GRN='\[\e[32m\]'
-YEL='\[\e[1;33m\]'
+# GRY='\[\e[1;30m\]'
+# RED='\[\e[1;31m\]'
+# GRN='\[\e[32m\]'
+# YEL='\[\e[1;33m\]'
 BLU='\[\e[1;34m\]'
-MAG='\[\e[35m\]'
+# MAG='\[\e[35m\]'
 NC='\[\e[m\]'
 
 #  For "literal" command substitution to be assigned to a variable,
@@ -44,9 +45,15 @@ NC='\[\e[m\]'
 #        T='$RED',
 #  Otherwise, the semicolon will be interpreted as a command separator.
 
-PS1="\`
-if [[ \$EUID -eq 0 ]]; then PCT='$RED'; else PCT='$BLU'; fi;
-if [[ -d .git ]]; then INFO=$MAG\$(parse_git_branch); else INFO='\!'; fi;
-echo '\n$GRN[\w] $GRY('\$PCT'\t$GRY)-('\$PCT'\u$GRY)-('\$PCT''\$INFO'$GRY)\n$YEL->$NC '\`"
+# PS1="\`
+# if [[ \$EUID -eq 0 ]]; then PCT='$RED'; else PCT='$BLU'; fi;
+# if [[ -d .git ]]; then INFO=$MAG\$(parse_git_branch); else INFO='\!'; fi;
+# echo '\n$GRN[\w] $GRY('\$PCT'\t$GRY)-('\$PCT'\u$GRY)-('\$PCT''\$INFO'$GRY)\n$YEL->$NC '\`"
 
-PS2="$YEL>>$NC "
+# PS2="$YEL>>$NC "
+
+#  But most of the time I think the above is too much, so it is only included
+#  here for instructive purposes.
+
+PS1="[$BLU\W$NC]\$ "
+

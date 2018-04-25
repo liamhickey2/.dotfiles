@@ -55,24 +55,6 @@ set noswapfile
 set nobackup
 set nowritebackup
 
-" Save temp files to ~/.vim/tmp
-"set backupdir=~/.vim/tmp
-
-" Version backups
-"au BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M%S") . '~'
-"set history=50		" keep 50 lines of command line history
-"set incsearch		" do incremental searching
-
-"""""""""" Terminal """""""""""
-
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-"let &guioptions = substitute(&guioptions, "t", "", "g")
-
-" In many terminal emulators the mouse works just fine, thus enable it.
-"if has('mouse')
-"  set mouse=a
-"endif
-
 """""""""" Aliases """""""""""""
 
 " Don't use Ex mode, use Q for formatting

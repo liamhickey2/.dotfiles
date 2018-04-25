@@ -42,7 +42,6 @@ set -o notify
 set -o noclobber
 set -o ignoreeof
 
-
 # Enable options:
 shopt -s cdspell
 shopt -s cdable_vars
@@ -69,7 +68,7 @@ if [ "$?" == 2 ]; then
 
     ssh-add -l &>/dev/null
     if [ "$?" == 2 ]; then
-        yes | rm ~/.ssh-agent >/dev/null
+        rm ~/.ssh-agent
         # Start agent and store agent connection info.
         (umask 066; ssh-agent > ~/.ssh-agent)
         eval "$(<~/.ssh-agent)" >/dev/null
@@ -97,9 +96,7 @@ fi
 alias more='less'
 export PAGER=less
 export LESSCHARSET='latin1'
-export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
-                # Use this if lesspipe.sh exists.
-export LESS='-i -N -w  -z-4 -g -M -X -F -R -P%t?f%f \
+export LESS='-i -g -M -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 
 # LESS man page colors (makes Man pages more readable).
