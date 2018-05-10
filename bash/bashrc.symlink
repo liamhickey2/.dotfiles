@@ -3,7 +3,7 @@
 #  PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
 #  By Liam Hickey <liamhickey@cmail.carleton.ca>
 #
-#  Last modified: 21 Oct 2016
+#  Last modified: 10 May 2018
 
 #  See:
 #  http://tldp.org/LDP/abs/html/index.html
@@ -82,12 +82,6 @@ if [ "$?" == 1 ]; then
     # Time to add one.
     ssh-add -t 4h
 fi
-
-#============================================================
-#
-#  ALIASES
-#
-#============================================================
 
 #-------------------------------------------------------------
 # Tailoring 'less'
@@ -197,3 +191,4 @@ function repeat()       # Repeat n times command.
         eval "$@";
     done
 }
+
