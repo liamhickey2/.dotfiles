@@ -17,7 +17,7 @@
 export BASH=$HOME/.dotfiles
 
 # project folder that I can `c [tab]` to
-export PROJECTS=~/git
+export PROJECTS=/mnt/c/Users/liamhickey/git
 
 # all of my bash files
 typeset config_files

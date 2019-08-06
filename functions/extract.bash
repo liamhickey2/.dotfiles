@@ -2,16 +2,15 @@
 #
 # Usage: extract <file>
 # Description: extracts archived files / mounts disk images
-# Note: .dmg/hdiutil is macOS-specific.
 #
 # credit: http://nparikh.org/notes/zshrc.txt
-extract () {
+extract () 
+{
     if [ -f $1 ]; then
         case $1 in
             *.tar.bz2)  tar -jxvf $1                        ;;
             *.tar.gz)   tar -zxvf $1                        ;;
             *.bz2)      bunzip2 $1                          ;;
-            *.dmg)      hdiutil mount $1                    ;;
             *.gz)       gunzip $1                           ;;
             *.tar)      tar -xvf $1                         ;;
             *.tbz2)     tar -jxvf $1                        ;;
@@ -28,3 +27,4 @@ extract () {
         echo "'$1' is not a valid file"
     fi
 }
+
