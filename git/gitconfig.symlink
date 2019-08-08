@@ -45,7 +45,7 @@
         ui      = true
 [core]
         editor  = vim
-        autocrlf= true
+        autocrlf= input
 [push]
         default = current
 [pull]
