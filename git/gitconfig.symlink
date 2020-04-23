@@ -38,6 +38,8 @@
 	squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
 	anw	 = "!f(){ git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -; };f"
 	alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
+	save = commit -am "WIP: SAVING"
+	fp = !git fetch --all && git pull
 [color]
 	diff = auto
 	status = auto
