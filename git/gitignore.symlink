@@ -7,4 +7,11 @@
 *.swp
 *.xml
 *.prefs
+*.txt
+*.bin
 
+# ignores for phoenix development
+*/.settings/*
+.project
+Incremental.X/
+universal_test_files/
