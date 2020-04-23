@@ -19,6 +19,12 @@ export BASH=$HOME/.dotfiles
 # project folder that I can `c [tab]` to
 export PROJECTS=/mnt/c/Users/liamhickey/git
 
+# Use an alternative screen directory so sudo is needed on WSL
+export SCREENDIR=$HOME/.screen
+
+# The GPG TTY needs to be configured when using WSL/OSX
+export GPG_TTY=$(tty)
+
 # all of my bash files
 typeset config_files
 config_files=$(find $BASH -name "*.bash")
@@ -28,6 +34,8 @@ for file in ${config_files}
 do
   source $file
 done
+
+cd /mnt/c/Users/liamhickey
 
 #-------------------------------------------------------------
 # Settings
