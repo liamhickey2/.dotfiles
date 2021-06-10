@@ -19,6 +19,9 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias du='du -kh'    # Makes a more readable output.
 alias df='df -kTh'
 
+if [[ "$(</proc/sys/kernel/osrelease)" == *microsoft* ]]; then
+    alias git="/mnt/c/Users/liamhickey/AppData/Local/Programs/Git/bin/git.exe" 
+fi
 #-------------------------------------------------------------
 # The 'ls' family (this assumes you use a recent GNU ls).
 #-------------------------------------------------------------

@@ -11,7 +11,8 @@
 *.bin
 
 # ignores for phoenix development
-*/.settings/*
 .project
 Incremental.X/
-universal_test_files/
+geotabCryptoArm/LibDebugEet/
+*/.settings/*
+

@@ -10,107 +10,6 @@
 #
 # =============================================================== #
 
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
-
-# shortcut to this dotfiles path is $BASH
-export BASH=$HOME/.dotfiles
-
-# project folder that I can `c [tab]` to
-export PROJECTS=/mnt/c/Users/liamhickey/git
-
-# Use an alternative screen directory so sudo is needed on WSL
-export SCREENDIR=$HOME/.screen
-
-# The GPG TTY needs to be configured when using WSL/OSX
-export GPG_TTY=$(tty)
-
-# all of my bash files
-typeset config_files
-config_files=$(find $BASH -name "*.bash")
-
-# load everything
-for file in ${config_files}
-do
-  source $file
-done
-
-cd /mnt/c/Users/liamhickey
-
-#-------------------------------------------------------------
-# Settings
-#-------------------------------------------------------------
-
-#set -o nounset     # These  two options are useful for debugging.
-#set -o xtrace
-alias debug="set -o nounset; set -o xtrace"
-
-ulimit -S -c 0      # Don't want coredumps.
-set -o notify
-set -o noclobber
-set -o ignoreeof
-
-# Enable options:
-shopt -s cdspell
-shopt -s cdable_vars
-shopt -s checkhash
-shopt -s checkwinsize
-shopt -s sourcepath
-shopt -s no_empty_cmd_completion
-shopt -s cmdhist
-shopt -s histappend histreedit histverify
-shopt -s extglob       # Necessary for programmable completion.
-shopt -s globstar
-
-#-------------------------------------------------------------
-# SSH
-#-------------------------------------------------------------
-
-# Ensure agent is running
-ssh-add -l &>/dev/null
-if [ "$?" == 2 ]; then
-    # Could not open a connection to your authentication agent.
-
-    # Load stored agent connection info.
-    test -r ~/.ssh-agent && \
-        eval "$(<~/.ssh-agent)" >/dev/null
-
-    ssh-add -l &>/dev/null
-    if [ "$?" == 2 ]; then
-        rm ~/.ssh-agent
-        # Start agent and store agent connection info.
-        (umask 066; ssh-agent > ~/.ssh-agent)
-        eval "$(<~/.ssh-agent)" >/dev/null
-    fi
-fi
-
-# Load identities
-ssh-add -l &>/dev/null
-if [ "$?" == 1 ]; then
-    # The agent has no identities.
-    # Time to add one.
-    ssh-add -t 4h
-fi
-
-#-------------------------------------------------------------
-# Tailoring 'less'
-#-------------------------------------------------------------
-
-alias more='less'
-export PAGER=less
-export LESSCHARSET='latin1'
-export LESS='-i -g -M -R -P%t?f%f \
-:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
-
-# LESS man page colors (makes Man pages more readable).
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
-
 #============================================================
 #
 #  FUNCTIONS
@@ -188,9 +87,34 @@ function ii()   # Get current host related info.
     echo
 }
 
-#-------------------------------------------------------------
-# Misc utilities:
-#-------------------------------------------------------------
+function ssh-login() # re-add the ssh identity
+{
+    # Ensure agent is running
+    ssh-add -l &>/dev/null
+    if [ "$?" == 2 ]; then
+        # Could not open a connection to your authentication agent.
+
+        # Load stored agent connection info.
+        test -r ~/.ssh-agent && \
+            eval "$(<~/.ssh-agent)" >/dev/null
+
+        ssh-add -l &>/dev/null
+        if [ "$?" == 2 ]; then
+            rm ~/.ssh-agent
+            # Start agent and store agent connection info.
+            (umask 066; ssh-agent > ~/.ssh-agent)
+            eval "$(<~/.ssh-agent)" >/dev/null
+        fi
+    fi
+
+    # Load identities
+    ssh-add -l &>/dev/null
+    if [ "$?" == 1 ]; then
+        # The agent has no identities.
+        # Time to add one.
+        ssh-add -t 4h
+    fi
+}
 
 function repeat()       # Repeat n times command.
 {
@@ -200,4 +124,94 @@ function repeat()       # Repeat n times command.
         eval "$@";
     done
 }
+
+#============================================================
+#
+#  STARTUP TASKS
+#
+#============================================================
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# shortcut to this dotfiles path is $BASH
+export BASH=$HOME/.dotfiles
+
+# project folder that I can `c [tab]` to
+export PROJECTS=/mnt/c/Users/liamhickey/git
+
+# home directory for WSL
+export MOUNT_HOME=/mnt/c/Users/liamhickey
+
+# Use an alternative screen directory so sudo is needed on WSL
+export SCREENDIR=$HOME/.screen
+
+# The GPG TTY needs to be configured when using WSL/OSX
+export GPG_TTY=$(tty)
+
+# add my additional functions to the path
+export PATH=$PATH:$HOME/.dotfiles/bin
+
+# all of my bash files
+typeset config_files
+config_files=$(find $BASH -name "*.bash")
+
+# load everything
+for file in ${config_files}
+do
+  source $file
+done
+
+cd /mnt/c/Users/liamhickey
+
+#-------------------------------------------------------------
+# Settings
+#-------------------------------------------------------------
+
+#set -o nounset     # These  two options are useful for debugging.
+#set -o xtrace
+alias debug="set -o nounset; set -o xtrace"
+
+ulimit -S -c 0      # Don't want coredumps.
+set -o notify
+set -o noclobber
+set -o ignoreeof
+
+# Enable options:
+shopt -s cdspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob       # Necessary for programmable completion.
+shopt -s globstar
+
+#-------------------------------------------------------------
+# SSH
+#-------------------------------------------------------------
+
+# this loads my identity and sets up an agent to expire in 4 hours.
+ssh-login
+
+#-------------------------------------------------------------
+# Tailoring 'less'
+#-------------------------------------------------------------
+
+alias more='less'
+export PAGER=less
+export LESSCHARSET='latin1'
+export LESS='-i -g -M -R -Q -P%t?f%f \
+:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# LESS man page colors (makes Man pages more readable).
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
 

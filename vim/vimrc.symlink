@@ -67,3 +67,6 @@ inoremap <C-U> <C-G>u<C-U>
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
+
+" Remove bell sound
+set visualbell
