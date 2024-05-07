@@ -9,10 +9,11 @@
 *.prefs
 *.txt
 *.bin
+cscope.out
 
-# ignores for phoenix development
+# ignores for development
 .project
 Incremental.X/
 geotabCryptoArm/LibDebugEet/
 */.settings/*
-
+flashChipFile
