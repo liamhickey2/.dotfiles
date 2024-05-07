@@ -1,5 +1,5 @@
 " Maintainer: Liam Hickey <liam.hickey@bell.net>
-" Last change:	2016 Oct 20
+" Last change:	2024 May 7
 " Based on Bram Moolenaar's example vimrc
 
 " When started as "evim", evim.vim will already have done these settings.
@@ -11,16 +11,16 @@ endif
 
 set wildmenu 	" Better command-line-completion
 set number  	" show line numbers
+set relativenumber  " other than the current line, the line number is relative to the current one
 set ruler	" show the cursor position all the time
 set showcmd	" display incomplete commands
-set autoindent	" always set autoindenting on
 set lazyredraw  " redraw only when we need to
 set showmatch   " highlight matching [{()}]
 set autoread	" autoread outside changes
 set encoding=utf8
-
-filetype plugin on
-filetype indent on
+set mouse=a  " enable mouse
+set visualbell  " Remove bell sound
+set hlsearch " highlight all occurences of a search
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -35,11 +35,17 @@ endif
 
 """"""" Indentation/Spacing """""""""
 
-" Indentation settings for using 4 spaces instead of tabs.
-" Do not change 'tabstop' from its default value of 8 with this setup.
+" automatically try to set the filetype, and load an indent file, plugin file
+filetype plugin indent on
+
+" autoindent when creating constructs in C
+set autoindent
+set cindent
+
+" Indentation settings for tabs (displayed with a width of 4 spaces).
 set shiftwidth=4
-set softtabstop=4
-set expandtab
+set tabstop=4
+set noexpandtab
 
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -55,18 +61,38 @@ set noswapfile
 set nobackup
 set nowritebackup
 
+"""""""""" Plugins/Packages """""""""""""
+
+" Use gdb in vim
+packadd termdebug
+let g:termdebugger='arm-none-eabi-gdb'
+let g:termdebug_wide=1
+set mouse=a
+
+" Install vim-plug
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin()
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+call plug#end()
+
+" Center the fzf menu
+let g:fzf_layout = { 'up': '~50%' }
+
 """""""""" Aliases """""""""""""
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 
-" Remove bell sound
-set visualbell
+" Map ctrl+o for fzf :Files command
+nnoremap <C-o> :Files<Cr>
+
+" Map space to ripgrep
+map <space> :Rg<CR>
+
