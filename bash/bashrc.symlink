@@ -3,7 +3,7 @@
 #  PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
 #  By Liam Hickey <liamhickey@cmail.carleton.ca>
 #
-#  Last modified: 10 May 2018
+#  Last modified: May 7, 2024
 
 #  See:
 #  http://tldp.org/LDP/abs/html/index.html
@@ -138,16 +138,7 @@ function repeat()       # Repeat n times command.
 export BASH=$HOME/.dotfiles
 
 # project folder that I can `c [tab]` to
-export PROJECTS=/mnt/c/Users/liamhickey/git
-
-# home directory for WSL
-export MOUNT_HOME=/mnt/c/Users/liamhickey
-
-# Use an alternative screen directory so sudo is needed on WSL
-export SCREENDIR=$HOME/.screen
-
-# The GPG TTY needs to be configured when using WSL/OSX
-export GPG_TTY=$(tty)
+export PROJECTS=/home/williamhickey/git
 
 # add my additional functions to the path
 export PATH=$PATH:$HOME/.dotfiles/bin
@@ -161,8 +152,6 @@ for file in ${config_files}
 do
   source $file
 done
-
-cd /mnt/c/Users/liamhickey
 
 #-------------------------------------------------------------
 # Settings
