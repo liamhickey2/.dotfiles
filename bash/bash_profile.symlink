@@ -14,13 +14,9 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Add NXP build tools to path
-PATH=$PATH:/c/NXP/S32DS_ARM_v2.2/S32DS/build_tools/msys32/mingw32/bin/:/c/NXP/S32DS_ARM_v2.2/S32DS/build_tools/msys32/usr/bin
-export PATH
-
-#parse_git_branch() {
-#     git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
-#}
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
+}
 
 name_and_server() {
   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
@@ -34,7 +30,6 @@ name_and_server() {
 #       GRY_NPC='\[$GRY\]'
 #  Otherwise the shell will not be able to correctly calculate the length
 #  of the PS1.
-
 GRY='\[\e[1;30m\]'
 RED='\[\e[1;31m\]'
 GRN='\[\e[32m\]'
@@ -64,16 +59,13 @@ NC='\[\e[m\]'
 #  When a variable's value contains a semicolon it should be strong quoted:
 #        T='$RED',
 #  Otherwise, the semicolon will be interpreted as a command separator.
+PS1="\`
+if [[ \$EUID -eq 0 ]]; then PCT='$RED'; else PCT='$BLU'; fi;
+if [[ -d .git ]]; then INFO=$MAG\$(parse_git_branch); else INFO='\!'; fi;
+echo '\n$GRN[\w] $GRY('\$PCT'\t$GRY)-('\$PCT'$GRY)-('\$PCT''\$INFO'$GRY)\n$YEL->$NC '\`"
 
-#PS1="\`
-#if [[ \$EUID -eq 0 ]]; then PCT='$RED'; else PCT='$BLU'; fi;
-#if [[ -d .git ]]; then INFO=$MAG\$(parse_git_branch); else INFO='\!'; fi;
-#echo '\n$GRN[\w] $GRY('\$PCT'\t$GRY)-('\$PCT'$GRY)-('\$PCT''\$INFO'$GRY)\n$YEL->$NC '\`"
+PS2="$YEL>>$NC "
 
-#PS2="$YEL>>$NC "
-
-#  But most of the time I think the above is too much, so it is only included
-#  here for instructive purposes.
-
-PS1="\`echo '\t [$BLU\W$NC] $MAG$(name_and_server)$NC\$ '\`"
+#  Alternate minimal PS1
+# PS1="\`echo '\t [$BLU\W$NC] $MAG$(name_and_server)$NC\$ '\`"
 
