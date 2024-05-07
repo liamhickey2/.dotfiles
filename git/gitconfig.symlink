@@ -3,9 +3,31 @@
 	path = ~/.gitconfig.local
 [hub]
 	protocol = https
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = true
+[core]
+	editor = vim
+	autocrlf= input
+	excludesfile = ~/.gitignore
+	preloadIndex = true
+[push]
+	default = current
+[pull]
+	rebase = true
+[merge]
+	tool = vimdiff
+	ff	 = false
+[user]
+	signingkey = 64D43E1799DC8377
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
 [alias]
 	c = commit
-#        grv = "!_() { git log master ${1}..HEAD --format=%B -E --grep="x\..{2}\..{2}"; };_"
 	ca = commit -a
 	cm	 = commit -m
 	cam	 = commit -am
@@ -46,30 +68,7 @@
         umr    = !git checkout master && git fetch --all && git submodule update --init && git pull && git co - && git rebase master
         umrp   = !git checkout master && git fetch --all && git submodule update --init && git pull && git co - && git rebase master && git push -f
         umrpnc = !git checkout master && git fetch --all && git submodule update --init && git pull && git co - && git rebase master && git push -f -o ci.skip
-#        get-release-commits = "!_() { git log master ${1}..HEAD -E --grep='x\..{2}\..{2}'; };_"
-#        get-first-release-version = "!_() { git log master ${1}..HEAD --format=%B -E --grep='x\..{2}\..{2}' --reverse | head -n 1; };_"
+        get-release-commits = !git log master ${1}..HEAD -E --grep='x\..{2}\..{2}'
+        get-first-release-version = !git log master ${1}..HEAD --format=%B -E --grep='x\..{2}\..{2}' --reverse | head -n 1
         su = submodule update
         sui = submodule update --init
-[color]
-	diff = auto
-	status = auto
-	branch = auto
-	ui = true
-[core]
-	editor = vim
-	autocrlf= input
-	excludesfile = ~/.gitignore
-	preloadIndex = true
-[push]
-	default = current
-[pull]
-	rebase = true
-[merge]
-	tool = vimdiff
-	ff	 = false
-[user]
-	signingkey = 64D43E1799DC8377
-[commit]
-	gpgsign = true
-[gpg]
-	program = gpg
